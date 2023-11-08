@@ -4,7 +4,7 @@
 Name:       info.you_ra.screen_recorder
 
 Summary:    Screen recorder application
-Version:    0.1.302818
+Version:    0.1.302820
 Release:    1
 Group:      Qt/Qt
 License:    GPLv2
@@ -13,7 +13,6 @@ Source0:    %{name}-%{version}.tar.bz2
 
 Requires:   sailfishsilica-qt5 >= 0.10.9
 #Requires:   ffmpeg
-#Requires:   lipstick2vnc
 BuildRequires:  pkgconfig(auroraapp)
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
@@ -22,7 +21,7 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  cmake
 BuildRequires:  ffmpeg-devel
 BuildRequires:  libvncserver-devel
-
+BuildRequires:  lipstick2vnc
 %description
 Screen recorder application
 
@@ -40,11 +39,14 @@ DESTDIR=%{buildroot} cmake --build . --target install
 desktop-file-install --delete-original         --dir %{buildroot}%{_datadir}/applications                %{buildroot}%{_datadir}/applications/*.desktop
 
 mkdir -p %{buildroot}%{_datadir}/%{name}/lib/
+mkdir -p %{buildroot}%{_datadir}/%{name}/bin/
 cp /usr/lib/libavcodec.so.* %{buildroot}%{_datadir}/%{name}/lib/
 cp /usr/lib/libavformat.so.* %{buildroot}%{_datadir}/%{name}/lib/
 cp /usr/lib/libavutil.so.* %{buildroot}%{_datadir}/%{name}/lib/
 cp /usr/lib/libswscale.so.* %{buildroot}%{_datadir}/%{name}/lib/
 cp /usr/lib/libvncclient.so.* %{buildroot}%{_datadir}/%{name}/lib/
+cp /usr/lib/libswresample.so.* %{buildroot}%{_datadir}/%{name}/lib/
+cp /usr/bin/lipstick2vnc %{buildroot}%{_datadir}/%{name}/bin/
 
 %files
 %defattr(-,root,root,-)
