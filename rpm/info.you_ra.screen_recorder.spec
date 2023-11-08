@@ -20,8 +20,8 @@ BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  desktop-file-utils
 BuildRequires:  cmake
-#BuildRequires:  ffmpeg-devel
-#BuildRequires:  libvncserver-devel
+BuildRequires:  ffmpeg-devel
+BuildRequires:  libvncserver-devel
 
 %description
 Screen recorder application
@@ -32,16 +32,19 @@ Screen recorder application
 
 %build
 %cmake
-%make_build
-if test -f %{name} ; then strip %{name}; fi
-strip libvncserver/lib*.so*
-strip ffmpeg*/lib*/lib*.so.
+cmake --build . -v
 
 %install
 rm -rf %{buildroot}
-%make_install
-
+DESTDIR=%{buildroot} cmake --build . --target install
 desktop-file-install --delete-original         --dir %{buildroot}%{_datadir}/applications                %{buildroot}%{_datadir}/applications/*.desktop
+
+mkdir -p %{buildroot}%{_datadir}/%{name}/lib/
+cp /usr/lib/libavcodec.so.* %{buildroot}%{_datadir}/%{name}/lib/
+cp /usr/lib/libavformat.so.* %{buildroot}%{_datadir}/%{name}/lib/
+cp /usr/lib/libavutil.so.* %{buildroot}%{_datadir}/%{name}/lib/
+cp /usr/lib/libswscale.so.* %{buildroot}%{_datadir}/%{name}/lib/
+cp /usr/lib/libvncclient.so.* %{buildroot}%{_datadir}/%{name}/lib/
 
 %files
 %defattr(-,root,root,-)
