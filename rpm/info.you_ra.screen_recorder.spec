@@ -39,19 +39,21 @@ DESTDIR=%{buildroot} cmake --build . --target install
 desktop-file-install --delete-original         --dir %{buildroot}%{_datadir}/applications                %{buildroot}%{_datadir}/applications/*.desktop
 
 mkdir -p %{buildroot}%{_datadir}/%{name}/lib/
-mkdir -p %{buildroot}%{_datadir}/%{name}/bin/
+mkdir -p %{buildroot}/usr/libexec/%{name}/bin
 cp /usr/lib/libavcodec.so.* %{buildroot}%{_datadir}/%{name}/lib/
 cp /usr/lib/libavformat.so.* %{buildroot}%{_datadir}/%{name}/lib/
 cp /usr/lib/libavutil.so.* %{buildroot}%{_datadir}/%{name}/lib/
 cp /usr/lib/libswscale.so.* %{buildroot}%{_datadir}/%{name}/lib/
 cp /usr/lib/libvncclient.so.* %{buildroot}%{_datadir}/%{name}/lib/
 cp /usr/lib/libswresample.so.* %{buildroot}%{_datadir}/%{name}/lib/
-cp /usr/bin/lipstick2vnc %{buildroot}%{_datadir}/%{name}/bin/
+cp /usr/bin/lipstick2vnc %{buildroot}/usr/libexec/%{name}/bin/
+chmod +x %{buildroot}/usr/libexec/%{name}/bin/*
 
 %files
 %defattr(-,root,root,-)
 %{_bindir}/%{name}
 %defattr(644,root,root,-)
 %{_datadir}/%{name}
+/usr/libexec/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
