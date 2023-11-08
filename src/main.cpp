@@ -18,24 +18,31 @@
 ** along with this program; if not, write an email to the license@you-ra.info
 *******************************************************************************/
 
-#include <auroraapp.h>
 #include <QtQuick>
+#include <auroraapp.h>
 
-#include "settings.h"
 #include "interfacer.h"
 #include "recordingsmodel.h"
+#include "settings.h"
 
-
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     QScopedPointer<QGuiApplication> application(Aurora::Application::application(argc, argv));
     application->setOrganizationName(QStringLiteral("info.you_ra"));
     application->setApplicationName(QStringLiteral("screen_recorder"));
 
     QScopedPointer<QQuickView> view(Aurora::Application::createView());
-    
+
+    QProcess process;
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    env.insert("LD_LIBRARY_PATH", "/usr/libexec/info.you_ra.screen_recorder/");
+    process.setProcessEnvironment(env);
+    if (!process.startDetached("/usr/libexec/info.you_ra.screen_recorder/lipstick2vnc")) {
+        qWarning() << "CANT START libstick2vnc";
+    }
+
     // Add Qt translations
-    QTranslator *translator = new QTranslator();
+    QTranslator* translator = new QTranslator();
     translator->load(QLocale::system(), "screen_recorder", "_", Aurora::Application::pathTo("translations").toLocalFile(), ".qm");
     application->installTranslator(translator);
 
@@ -61,4 +68,3 @@ int main(int argc, char *argv[])
 
     return application->exec();
 }
-
